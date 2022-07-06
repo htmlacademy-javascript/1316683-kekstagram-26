@@ -1,4 +1,2 @@
-import { getUserInfo } from './modules/data.js';
-
-// Data Generation
-getUserInfo(25);
+import { renderPictures } from './modules/render-pictures.js';
+renderPictures(25);
