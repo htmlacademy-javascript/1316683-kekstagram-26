@@ -20,20 +20,20 @@ const getComments = (countComments) => {
   return listComments;
 };
 
-// Генерация данных пользователя
-const getUserInfo = (count) => {
-  const usersData = [];
+// Генерация данных изображений
+const getPictureData = (count) => {
+  const picturesData = [];
 
   for (let i = 1; i <= count; i++) {
-    usersData.push({
+    picturesData.push({
       id: i,
       url: `photos/${i}.jpg`,
       description: `Description number ${i}`,
       likes: getRandomIntInclusive(15, 200),
-      comments: getComments(getRandomIntInclusive(1, 3)),
+      comments: getComments(2),
     });
   }
-  return usersData;
+  return picturesData;
 };
 
-export { getUserInfo };
+export { getPictureData };

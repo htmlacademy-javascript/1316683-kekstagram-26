@@ -1,22 +1,25 @@
-import { getUserInfo } from './data.js';
+import { renderFullPictures } from './render-full-pictures.js';
 
-const renderPictures = (count) => {
+const renderMiniPictures = (similarPicturesData) => {
   const pictureContainer = document.querySelector('.pictures');
   const pictureTemplate = document.querySelector('#picture')
     .content
     .querySelector('.picture');
   const pictureFragment = document.createDocumentFragment();
-  const similarPictures = getUserInfo(count);
 
-  similarPictures.forEach(({ url, likes, comments }) => {
+  similarPicturesData.forEach((pictureElementData) => {
     const pictureElement = pictureTemplate.cloneNode(true);
-    pictureElement.querySelector('.picture__img').src = url;
-    pictureElement.querySelector('.picture__likes').textContent = likes;
-    pictureElement.querySelector('.picture__comments').textContent = comments.length;
+    pictureElement.querySelector('.picture__img').src = pictureElementData.url;
+    pictureElement.querySelector('.picture__likes').textContent = pictureElementData.likes;
+    pictureElement.querySelector('.picture__comments').textContent = pictureElementData.comments.length;
+
+    pictureElement.addEventListener('click', () => {
+      renderFullPictures(pictureElementData);
+    });
     pictureFragment.append(pictureElement);
   });
 
   pictureContainer.append(pictureFragment);
 };
 
-export { renderPictures };
+export { renderMiniPictures };
