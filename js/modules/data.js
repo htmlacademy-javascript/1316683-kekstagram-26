@@ -24,11 +24,11 @@ const getComments = (countComments) => {
 };
 
 // Генерация данных изображений
-const getPictureData = (count) => {
-  const picturesData = [];
+const getPictures = (count) => {
+  const pictures = [];
 
   for (let i = 1; i <= count; i++) {
-    picturesData.push({
+    pictures.push({
       id: i,
       url: `photos/${i}.jpg`,
       description: `Description number ${i}`,
@@ -36,7 +36,7 @@ const getPictureData = (count) => {
       comments: getComments(COUNT_COMMENTS),
     });
   }
-  return picturesData;
+  return pictures;
 };
 
-export { getPictureData };
+export { getPictures };
