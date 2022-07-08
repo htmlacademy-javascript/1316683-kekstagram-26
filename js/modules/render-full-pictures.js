@@ -1,53 +1,64 @@
 let isOpenBigPicture = false;
 const body = document.querySelector('body');
-const bigPicture = document.querySelector('.big-picture');
-const bigPictureImage = bigPicture.querySelector('.big-picture__img > img');
-const bigPictureDescription = bigPicture.querySelector('.social__caption');
-const bigPictureLikesCount = bigPicture.querySelector('span.likes-count');
-const bigPictureCommentsCount = bigPicture.querySelector('span.comments-count');
-const bigPictureCommentsContainer = bigPicture.querySelector('.social__comments');
-const bigPictureCommentElements = bigPictureCommentsContainer.children;
-const bigPictureCloseBtn = bigPicture.querySelector('#picture-cancel');
+const bigPictureElement = document.querySelector('.big-picture');
+const imageElement = bigPictureElement.querySelector('.big-picture__img > img');
+const descriptionElement = bigPictureElement.querySelector('.social__caption');
+const likesCountElement = bigPictureElement.querySelector('span.likes-count');
+const commentsCountElement = bigPictureElement.querySelector('span.comments-count');
+const closeBtnElement = bigPictureElement.querySelector('#picture-cancel');
+const commentsContainerElement = bigPictureElement.querySelector('.social__comments');
+const commentElement = commentsContainerElement.firstElementChild.cloneNode(true);
+const commentsFragment = document.createDocumentFragment();
+
+
 
 const openBigPicture = () => {
-  bigPicture.classList.remove('hidden');
+  bigPictureElement.classList.remove('hidden');
   body.classList.add('modal-open');
+  bigPictureElement.querySelector('.comments-loader').classList.add('hidden');
+  bigPictureElement.querySelector('.social__comment-count').classList.add('hidden');
   isOpenBigPicture = true;
-};
 
-const closeBigPicture = () => {
   if (isOpenBigPicture) {
-    bigPictureCloseBtn.addEventListener('click', () => {
-      bigPicture.classList.add('hidden');
+    closeBtnElement.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      bigPictureElement.classList.add('hidden');
       body.classList.remove('modal-open');
-      // bigPictureCloseBtn.removeEventListener('click', closeBigPicture);
     }, { once: true });
 
     document.addEventListener('keydown', (evt) => {
       if (evt.code === 'Escape') {
-        bigPicture.classList.add('hidden');
+        evt.preventDefault();
+        bigPictureElement.classList.add('hidden');
         body.classList.remove('modal-open');
-        // document.removeEventListener('keydown', closeBigPicture);
       }
     }, { once: true });
   }
 };
 
+const renderComments = (comments) => {
+  commentsContainerElement.innerHTML = '';
+
+  comments.forEach((commentsItem) => {
+    const tempElement = commentElement.cloneNode(true);
+    tempElement.querySelector('img.social__picture').src = commentsItem.avatar;
+    tempElement.querySelector('img.social__picture').alt = commentsItem.name;
+    tempElement.querySelector('p.social__text').textContent = commentsItem.message;
+    commentsFragment.appendChild(tempElement);
+  });
+
+  commentsContainerElement.append(commentsFragment);
+};
+
 const renderFullPictures = (pictureElementData) => {
-  bigPictureImage.src = pictureElementData.url;
-  bigPicture.alt = pictureElementData.description;
-  bigPictureDescription.textContent = pictureElementData.description;
-  bigPictureLikesCount.textContent = pictureElementData.likes;
-  bigPictureCommentsCount.textContent = pictureElementData.comments.length;
+  imageElement.src = pictureElementData.url;
+  bigPictureElement.alt = pictureElementData.description;
+  descriptionElement.textContent = pictureElementData.description;
+  likesCountElement.textContent = pictureElementData.likes;
+  commentsCountElement.textContent = pictureElementData.comments.length;
 
-  for (let i = 0; i < bigPictureCommentElements.length; i++) {
-    bigPictureCommentElements[i].querySelector('img.social__picture').src = pictureElementData.comments[i].avatar;
-    bigPictureCommentElements[i].querySelector('img.social__picture').alt = pictureElementData.comments[i].name;
-    bigPictureCommentElements[i].querySelector('p.social__text').textContent = pictureElementData.comments[i].message;
-  }
-
+  renderComments(pictureElementData.comments);
   openBigPicture();
-  closeBigPicture();
 };
 
 export { renderFullPictures };
