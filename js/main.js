@@ -1,2 +1,4 @@
 import { renderGallery } from './modules/render-gallery.js';
-renderGallery(25);
+const COUNT_PICTURES = 25;
+
+renderGallery(COUNT_PICTURES);

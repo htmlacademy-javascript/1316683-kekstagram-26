@@ -1,5 +1,8 @@
 import { getRandomIntInclusive } from './util.js';
 
+const COUNT_LIKES = getRandomIntInclusive(15, 200);
+const COUNT_COMMENTS = getRandomIntInclusive(1, 3);
+
 // Генерация комментариев
 const getComments = (countComments) => {
   const MESSAGES_BODY = [
@@ -29,8 +32,8 @@ const getPictureData = (count) => {
       id: i,
       url: `photos/${i}.jpg`,
       description: `Description number ${i}`,
-      likes: getRandomIntInclusive(15, 200),
-      comments: getComments(2),
+      likes: COUNT_LIKES,
+      comments: getComments(COUNT_COMMENTS),
     });
   }
   return picturesData;
