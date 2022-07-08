@@ -20,16 +20,16 @@ const closeBigPicture = () => {
     bigPictureCloseBtn.addEventListener('click', () => {
       bigPicture.classList.add('hidden');
       body.classList.remove('modal-open');
-      bigPictureCloseBtn.removeEventListener('click', closeBigPicture);
-    });
+      // bigPictureCloseBtn.removeEventListener('click', closeBigPicture);
+    }, { once: true });
 
     document.addEventListener('keydown', (evt) => {
       if (evt.code === 'Escape') {
         bigPicture.classList.add('hidden');
         body.classList.remove('modal-open');
-        document.removeEventListener('keydown', closeBigPicture);
+        // document.removeEventListener('keydown', closeBigPicture);
       }
-    });
+    }, { once: true });
   }
 };
 
