@@ -26,10 +26,7 @@ const openBigPicture = () => {
 
   if (isOpenBigPicture) {
     closeBtnElement.addEventListener('click', closeBigPicture, { once: true });
-
-    document.addEventListener('keydown', (evt) => {
-      if (evt.code === 'Escape') { closeBigPicture(evt); }
-    }, { once: true });
+    document.addEventListener('keydown', (evt) => evt.code === 'Escape' ? closeBigPicture(evt) : {}, { once: true });
   }
 };
 
