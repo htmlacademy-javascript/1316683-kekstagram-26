@@ -1,9 +1,8 @@
 import { getRandomIntInclusive } from './util.js';
 
 const COUNT_LIKES = getRandomIntInclusive(15, 200);
-const COUNT_COMMENTS = getRandomIntInclusive(1, 3);
+const COUNT_COMMENTS = getRandomIntInclusive(2, 5);
 
-// Генерация комментариев
 const getComments = (countComments) => {
   const MESSAGES_BODY = [
     'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',

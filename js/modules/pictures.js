@@ -1,4 +1,4 @@
-import { renderFullPictures } from './render-full-pictures.js';
+import { renderFullPictures } from './full-pictures.js';
 
 const renderMiniPictures = (similarPicturesData) => {
   const pictureContainer = document.querySelector('.pictures');
@@ -12,11 +12,13 @@ const renderMiniPictures = (similarPicturesData) => {
     pictureElement.querySelector('.picture__img').src = pictureElementData.url;
     pictureElement.querySelector('.picture__likes').textContent = pictureElementData.likes;
     pictureElement.querySelector('.picture__comments').textContent = pictureElementData.comments.length;
-    pictureFragment.append(pictureElement);
+
     pictureElement.addEventListener('click', () => {
       renderFullPictures(pictureElementData);
     });
+    pictureFragment.append(pictureElement);
   });
+
   pictureContainer.append(pictureFragment);
 };
 
