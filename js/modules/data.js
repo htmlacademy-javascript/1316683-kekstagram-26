@@ -1,6 +1,8 @@
 import { getRandomIntInclusive } from './util.js';
 
-// Генерация комментариев
+const COUNT_LIKES = getRandomIntInclusive(15, 200);
+const COUNT_COMMENTS = getRandomIntInclusive(2, 5);
+
 const getComments = (countComments) => {
   const MESSAGES_BODY = [
     'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
@@ -20,20 +22,20 @@ const getComments = (countComments) => {
   return listComments;
 };
 
-// Генерация данных пользователя
-const getUserInfo = (count) => {
-  const usersData = [];
+// Генерация данных изображений
+const getPictures = (count) => {
+  const pictures = [];
 
   for (let i = 1; i <= count; i++) {
-    usersData.push({
+    pictures.push({
       id: i,
       url: `photos/${i}.jpg`,
       description: `Description number ${i}`,
-      likes: getRandomIntInclusive(15, 200),
-      comments: getComments(getRandomIntInclusive(1, 3)),
+      likes: COUNT_LIKES,
+      comments: getComments(COUNT_COMMENTS),
     });
   }
-  return usersData;
+  return pictures;
 };
 
-export { getUserInfo };
+export { getPictures };
