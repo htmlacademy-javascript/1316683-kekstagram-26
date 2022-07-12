@@ -22,12 +22,17 @@ const openBigPicture = () => {
     bigPictureElement.classList.add('hidden');
     body.classList.remove('modal-open');
     isOpenBigPicture = false;
+    closeBtnElement.removeEventListener('click', closeBigPicture);
+    document.removeEventListener('keydown', closeBigPicture);
   };
 
+  const isEscape = (evt) => evt.code === 'Escape';
+
   if (isOpenBigPicture) {
-    closeBtnElement.addEventListener('click', closeBigPicture, { once: true });
-    document.addEventListener('keydown', (evt) => evt.code === 'Escape' ? closeBigPicture(evt) : {}, { once: true });
+    closeBtnElement.addEventListener('click', closeBigPicture);
+    document.addEventListener('keydown', isEscape ? closeBigPicture : {});
   }
+
 };
 
 const renderComments = (comments) => {
