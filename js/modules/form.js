@@ -7,7 +7,6 @@ const renderForm = () => {
   const defaultImage = uploadElement.value;
   const inputHashTag = overlayElement.querySelector('.text__hashtags');
   const textareaComment = overlayElement.querySelector('textarea.text__description');
-  // const previewElement = overlayElement.querySelector('.img-upload__preview > img');
 
   const resetInputValue = () => {
     uploadElement.value = defaultImage;
