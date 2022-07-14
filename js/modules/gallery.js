@@ -1,10 +1,10 @@
 import { getPictures } from './data.js';
 import { renderMiniPictures } from './pictures.js';
-import { renderForm } from './render-form.js';
+import { form } from './form.js';
 
 const renderGallery = (count) => {
   renderMiniPictures(getPictures(count));
-  renderForm();
+  form();
 };
 
 export { renderGallery };
