@@ -5,15 +5,23 @@ const renderForm = () => {
   const overlayElement = formElement.querySelector('.img-upload__overlay');
   const closeOverlayElement = overlayElement.querySelector('#upload-cancel');
   const defaultImage = uploadElement.value;
+  const inputHashTag = overlayElement.querySelector('.text__hashtags');
+  const textareaComment = overlayElement.querySelector('textarea.text__description');
   // const previewElement = overlayElement.querySelector('.img-upload__preview > img');
+
+  const resetInputValue = () => {
+    uploadElement.value = defaultImage;
+    inputHashTag.value = '';
+    textareaComment.value = '';
+  };
 
   const closeForm = (evt) => {
     evt.preventDefault();
     body.classList.remove('modal-open');
     overlayElement.classList.add('hidden');
-    uploadElement.value = defaultImage;
     closeOverlayElement.removeEventListener('click', closeForm);
     document.removeEventListener('keydown', isEscape);
+    resetInputValue();
   };
 
   function isEscape(evt) {
