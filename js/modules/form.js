@@ -5,9 +5,9 @@ const renderForm = () => {
   const overlayElement = formElement.querySelector('.img-upload__overlay');
   const closeOverlayElement = overlayElement.querySelector('#upload-cancel');
   const defaultImage = uploadElement.value;
+  // const previewElement = overlayElement.querySelector('.img-upload__preview > img');
 
   const closeForm = (evt) => {
-    // console.log(evt.code);
     evt.preventDefault();
     body.classList.remove('modal-open');
     overlayElement.classList.add('hidden');
