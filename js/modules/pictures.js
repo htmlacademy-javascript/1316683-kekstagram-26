@@ -12,13 +12,9 @@ const renderMiniPictures = (similarPicturesData) => {
     pictureElement.querySelector('.picture__img').src = pictureElementData.url;
     pictureElement.querySelector('.picture__likes').textContent = pictureElementData.likes;
     pictureElement.querySelector('.picture__comments').textContent = pictureElementData.comments.length;
-
-    pictureElement.addEventListener('click', () => {
-      renderFullPictures(pictureElementData);
-    });
     pictureFragment.append(pictureElement);
+    pictureElement.addEventListener('click', () => renderFullPictures(pictureElementData));
   });
-
   pictureContainer.append(pictureFragment);
 };
 
