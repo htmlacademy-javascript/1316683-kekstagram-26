@@ -13,52 +13,99 @@ const pristineConfig = {
 };
 
 const pristine = new Pristine(formElement, pristineConfig);
+/* ----------------------------------------------------------------------------- */
+// 6. Хэш-теги разделяются пробелами;
+const checkSpaceInterval = (str) => {
+  const hashTags = str.trim().split(' ');
+  return !hashTags.some((hash) => hash.split('#').length > 2);
+};
 
-// Function Validator
-const regexp = /#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
+pristine.addValidator(
+  inputHashTag,
+  checkSpaceInterval,
+  'ERROR: Хэш-теги должны разделяться пробелами'
+);
+/* ----------------------------------------------------------------------------- */
+// 6. Нельзя указать больше пяти хэш-тегов
+const maxLengthHashTag = (str) => {
+  const hashTags = str.trim().split(' ');
+  return !(hashTags.length > 5);
+};
+
+pristine.addValidator(
+  inputHashTag,
+  maxLengthHashTag,
+  'ERROR: Нельзя указать больше пяти хэш-тегов;'
+);
+/* ----------------------------------------------------------------------------- */
+// 5.1 Один и тот же хэш-тег не может быть использован дважды
+// 5.2 Хэш-теги нечувствительны к регистру: #ХэшТег и #хэштег считаются одним и тем же тегом
+const checkDoubleHashTag = (str) => {
+  const hashTags = str.trim().toLowerCase().split(' ');
+  return !hashTags.some(
+    (hash) => hashTags.indexOf(hash) !== hashTags.lastIndexOf(hash)
+  );
+};
+
+pristine.addValidator(
+  inputHashTag,
+  checkDoubleHashTag,
+  'ERROR: Один и тот же хэш-тег не может быть использован дважды (хэш-теги нечувствительны к регистру: #ХэшТег и #хэштег считаются одним и тем же тегом)'
+);
+/* ----------------------------------------------------------------------------- */
+// 4. максимальная длина одного хэш-тега 20 символов, включая решётку
+const checkMaxLengthHash = (str) => {
+  const hashTags = str.trim().split(' ');
+  return !hashTags.some((hash) => hash.length > 20);
+};
+
+pristine.addValidator(
+  inputHashTag,
+  checkMaxLengthHash,
+  'ERROR: Максимальная длина одного хэш-тега 20 символов'
+);
+/* ----------------------------------------------------------------------------- */
+// 3. Хеш-тег не может состоять только из одной решётки
+const checkSharpOnly = (str) => {
+  const hashTags = str.trim().split(' ');
+  return !hashTags.some((hash) => hash.length === 1 && hash[0] === '#');
+};
+
+pristine.addValidator(
+  inputHashTag,
+  checkSharpOnly,
+  'ERROR: Хеш-тег не может состоять только из одной решётки'
+);
+/* ----------------------------------------------------------------------------- */
+/* 2. Строка после решётки должна состоять из букв и чисел и не может содержать пробелы,
+спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.; */
+const checkHashFull = (str) => {
+  const regexp = /^#[A-Za-zА-Яа-яЁё0-9]{1,}$/;
+  const hashTags = str.trim().split(' ');
+  return hashTags.every((hash) => regexp.test(hash));
+};
+
+pristine.addValidator(
+  inputHashTag,
+  checkHashFull,
+  'ERROR: Хеш-тег должен состоять из букв и чисел и не может содержать спец.символы'
+);
+/* ----------------------------------------------------------------------------- */
+// 1. Хэш-тег начинается с символа # (решётка);
+const checkSharpStart = (str) => {
+  const hashTags = str.trim().split(' ');
+  return hashTags.every((hash) => hash[0] === '#');
+};
+
+pristine.addValidator(
+  inputHashTag,
+  checkSharpStart,
+  'ERROR: Каждый Хеш-тег должен начинаться с символа "#"'
+);
+/* ----------------------------------------------------------------------------- */
+// Длина комментария не может составлять больше 140 символов
 const stringCheckMaxLength = (str, maxLength = 140) => str.length <= maxLength;
 
-// Проверка на первый символ '#'
-const checkSharp = (str) => {
-  const hashTags = str.split(' ');
-  return hashTags.every((hash) => hash !== '' ? hash[0] === '#' : true);
-};
-
-// Строка после решётки должна состоять из букв и чисел и не может содержать пробелы,
-// спецсимволы(#, @, $ и т.п.), символы пунктуации(тире, дефис, запятая и т.п.), эмодзи и т.д.;
-const checkValidStr = (str) => {
-  const hashTags = str.split(' ');
-  return hashTags.every((hash) => !checkSharp(str) || (hash !== '' ? regexp.test(hash) : true));
-};
-
-// Проверка на пробел вконце хештега
-const checkEmptySymbol = (str) => {
-  const hashTags = str.trim().split(' ');
-  console.log(hashTags);
-  // return hashTags.every(() => str[str.length - 1] !== ' ');
-};
-
-// HashTag Validator
-pristine.addValidator(
-  inputHashTag,
-  checkSharp,
-  'ERROR: Хеш-тег должен начинаться с символа "#"'
-);
-
-pristine.addValidator(
-  inputHashTag,
-  checkValidStr,
-  `ERROR: Хеш-тег должен состоять из букв и чисел и не может содержать пробелы,
-  спецсимволы, также не должен превышать 20 символов`
-);
-
-pristine.addValidator(
-  inputHashTag,
-  checkEmptySymbol,
-  'ERROR: В конце Хеш-тега не может быть пробела.'
-);
-
-// TextAREA
 pristine.addValidator(
   textareaComment,
   stringCheckMaxLength,
