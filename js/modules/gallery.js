@@ -1,10 +1,10 @@
 import { getPictures } from './data.js';
 import { renderMiniPictures } from './pictures.js';
-import { form } from './form.js';
+import { initFormValidation } from './form.js';
 
 const renderGallery = (count) => {
   renderMiniPictures(getPictures(count));
-  form();
+  initFormValidation();
 };
 
 export { renderGallery };

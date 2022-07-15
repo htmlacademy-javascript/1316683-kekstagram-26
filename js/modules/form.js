@@ -1,4 +1,4 @@
-import { formValidation } from './pristine.js';
+import { pristine } from './pristine.js';
 
 const body = document.body;
 const formElement = document.querySelector('form#upload-select-image');
@@ -9,53 +9,49 @@ const defaultImage = uploadElement.value;
 const inputHashTag = overlayElement.querySelector('.text__hashtags');
 const textareaComment = overlayElement.querySelector('textarea.text__description');
 
-// const formValidation = () => {
-// const strHashTagArr = inputHashTag.value.split(' ');
-// Проверка что каждый хештег начинается с #
-// const isStartSharp = strHashTagArr.every((hashTag) => hashTag[0] === '#');
-// if (!isStartSharp) {
-//   console.error('Хештег начинается не с "#"');
-// }
-// };
+const resetInputValue = () => {
+  uploadElement.value = defaultImage;
+  inputHashTag.value = '';
+  textareaComment.value = '';
+};
 
-const form = () => {
+const formValidation = (evt) => {
+  evt.preventDefault();
+  const isFormValid = pristine.validate();
 
-  const resetInputValue = () => {
-    uploadElement.value = defaultImage;
-    inputHashTag.value = '';
-    textareaComment.value = '';
-  };
-
-  const submitForm = (evt) => {
-    evt.preventDefault();
-    formValidation(formElement);
-  };
-
-  const closeForm = (evt) => {
-    evt.preventDefault();
-    body.classList.remove('modal-open');
-    overlayElement.classList.add('hidden');
-    closeOverlayElement.removeEventListener('click', closeForm);
-    document.removeEventListener('keydown', isEscape);
-    formElement.removeEventListener('submit', submitForm);
-    resetInputValue();
-  };
-
-  function isEscape(evt) {
-    if (evt.code === 'Escape') {
-      closeForm(evt);
-    }
+  if (isFormValid) {
+    alert('OK');
+  } else {
+    alert('ERR');
   }
+};
 
-  const openForm = () => {
-    body.classList.add('modal-open');
-    overlayElement.classList.remove('hidden');
-    closeOverlayElement.addEventListener('click', closeForm);
-    document.addEventListener('keydown', isEscape);
-    formElement.addEventListener('submit', submitForm);
-  };
+const closeForm = (evt) => {
+  evt.preventDefault();
+  body.classList.remove('modal-open');
+  overlayElement.classList.add('hidden');
+  closeOverlayElement.removeEventListener('click', closeForm);
+  document.removeEventListener('keydown', isEscape);
+  formElement.removeEventListener('submit', formValidation);
+  resetInputValue();
+};
 
+function isEscape(evt) {
+  if (evt.code === 'Escape') {
+    closeForm(evt);
+  }
+}
+
+const openForm = () => {
+  body.classList.add('modal-open');
+  overlayElement.classList.remove('hidden');
+  closeOverlayElement.addEventListener('click', closeForm);
+  document.addEventListener('keydown', isEscape);
+  formElement.addEventListener('submit', formValidation);
+};
+
+const initFormValidation = () => {
   uploadElement.addEventListener('change', openForm);
 };
 
-export { form };
+export { initFormValidation };

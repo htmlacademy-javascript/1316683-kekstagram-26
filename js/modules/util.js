@@ -12,12 +12,4 @@ const getRandomIntInclusive = (min, max) => {
   return new Error('The {min} value is negative');
 };
 
-const stringCheckMaxLength = (str, maxLength) => {
-  if (typeof str === 'string') {
-    return str.length <= maxLength;
-  }
-  return new Error('The first argument is not a string');
-};
-stringCheckMaxLength();
-
 export { getRandomIntInclusive };
