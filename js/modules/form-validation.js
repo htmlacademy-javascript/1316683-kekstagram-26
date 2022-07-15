@@ -1,6 +1,0 @@
-
-const formValidation = () => {
-
-};
-
-export { formValidation };
