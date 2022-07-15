@@ -14,6 +14,14 @@ const pristineConfig = {
 
 const pristine = new Pristine(formElement, pristineConfig);
 /* ----------------------------------------------------------------------------- */
+// 7. Сброс ошибок при пустом поле; --- ПОКА ОСТАВИТЬ.
+const resetErrorInput = () => {
+  if (inputHashTag.value === '') { pristine.reset(); }
+};
+
+inputHashTag.addEventListener('input', resetErrorInput);
+
+/* ----------------------------------------------------------------------------- */
 // 6. Хэш-теги разделяются пробелами;
 const checkSpaceInterval = (str) => {
   const hashTags = str.trim().split(' ');
