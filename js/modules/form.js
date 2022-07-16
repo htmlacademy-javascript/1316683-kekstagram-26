@@ -1,4 +1,4 @@
-import { pristine } from './pristine.js';
+import { formValidation } from './form-validation.js';
 
 const body = document.body;
 const formElement = document.querySelector('form#upload-select-image');
@@ -9,23 +9,14 @@ const defaultImage = uploadElement.value;
 const inputHashTag = overlayElement.querySelector('.text__hashtags');
 const textareaComment = overlayElement.querySelector('textarea.text__description');
 
+// Сброс инпутов
 const resetInputValue = () => {
   uploadElement.value = defaultImage;
   inputHashTag.value = '';
   textareaComment.value = '';
 };
 
-const formValidation = (evt) => {
-  evt.preventDefault();
-  const isFormValid = pristine.validate();
-
-  if (isFormValid) {
-    alert('OK');
-  } else {
-    alert('ERR');
-  }
-};
-
+// Закрытие формы
 const closeForm = (evt) => {
   evt.preventDefault();
   body.classList.remove('modal-open');
@@ -33,23 +24,44 @@ const closeForm = (evt) => {
   closeOverlayElement.removeEventListener('click', closeForm);
   document.removeEventListener('keydown', isEscape);
   formElement.removeEventListener('submit', formValidation);
+  inputHashTag.removeEventListener('focus', onFocus);
+  textareaComment.removeEventListener('focus', onFocus);
   resetInputValue();
 };
 
+// Проверка на Escape
 function isEscape(evt) {
   if (evt.code === 'Escape') {
-    closeForm(evt);
+    if (inputHashTag.classList.contains('_focus') || textareaComment.classList.contains('_focus')) {
+      evt.preventDefault();
+    } else {
+      closeForm(evt);
+    }
   }
 }
 
+function onFocus(evt) {
+  evt.target.classList.add('_focus');
+  evt.target.addEventListener('blur', onBlur);
+}
+
+function onBlur(evt) {
+  evt.target.classList.remove('_focus');
+  evt.target.removeEventListener('blur', onBlur);
+}
+
+// Открытие формы
 const openForm = () => {
   body.classList.add('modal-open');
   overlayElement.classList.remove('hidden');
   closeOverlayElement.addEventListener('click', closeForm);
   document.addEventListener('keydown', isEscape);
   formElement.addEventListener('submit', formValidation);
+  inputHashTag.addEventListener('focus', onFocus);
+  textareaComment.addEventListener('focus', onFocus);
 };
 
+// Вызов валидации при событии
 const initFormValidation = () => {
   uploadElement.addEventListener('change', openForm);
 };
