@@ -1,7 +1,7 @@
 import { getRandomIntInclusive } from './util.js';
 
 const COUNT_LIKES = getRandomIntInclusive(15, 200);
-const COUNT_COMMENTS = getRandomIntInclusive(2, 5);
+const COUNT_COMMENTS = getRandomIntInclusive(5, 25);
 
 const getComments = (countComments) => {
   const MESSAGES_BODY = [
