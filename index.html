@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>Кекстаграм</title>
+  <script src="./pristine/pristine.min.js" defer></script>
   <script src="./js/main.js" type="module" defer></script>
 </head>
 
@@ -33,17 +34,19 @@
       <section class="img-upload">
         <div class="img-upload__wrapper">
           <h2 class="img-upload__title  visually-hidden">Загрузка фотографии</h2>
-          <form class="img-upload__form" id="upload-select-image" method="post" enctype="multipart/form-data"
+          <form class="img-upload__form" id="upload-select-image"
+            action="https://26.javascript.pages.academy/kekstagram" method="post" enctype="multipart/form-data"
             autocomplete="off">
 
             <!-- Изначальное состояние поля для загрузки изображения -->
             <fieldset class="img-upload__start">
-              <input type="file" id="upload-file" class="img-upload__input  visually-hidden" name="filename" required>
+              <input type="file" id="upload-file" accept="image/gif, image/jpeg, image/png"
+                class="img-upload__input  visually-hidden" name="filename" required>
               <label for="upload-file" class="img-upload__label  img-upload__control">Загрузить</label>
             </fieldset>
 
             <!-- Форма редактирования изображения -->
-            <div class="img-upload__overlay  hidden">
+            <div class="img-upload__overlay hidden">
               <div class="img-upload__wrapper">
                 <div class="img-upload__preview-container">
 
@@ -61,13 +64,13 @@
                   </div>
 
                   <!-- Изменение глубины эффекта, накладываемого на изображение -->
-                  <fieldset class="img-upload__effect-level  effect-level">
-                    <input class="effect-level__value" type="number" step="any" name="effect-level" value="">
+                  <fieldset class="img-upload__effect-level effect-level">
+                    <input class="effect-level__value" type="number" step="any" name="effect-level" value="" required>
                     <div class="effect-level__slider"></div>
                   </fieldset>
 
                   <!-- Кнопка для закрытия формы редактирования изображения -->
-                  <button type="reset" class="img-upload__cancel  cancel" id="upload-cancel">Закрыть</button>
+                  <button type="reset" class="img-upload__cancel cancel" id="upload-cancel">Закрыть</button>
                 </div>
 
                 <!-- Наложение эффекта на изображение -->
@@ -127,10 +130,11 @@
                 <!-- Добавление хэш-тегов и комментария к изображению -->
                 <fieldset class="img-upload__text text">
                   <div class="img-upload__field-wrapper">
-                    <input class="text__hashtags" name="hashtags" placeholder="#ХэшТег">
+                    <input type="text" class="text__hashtags" name="hashtags" placeholder="#ХэшТег">
                   </div>
                   <div class="img-upload__field-wrapper">
-                    <textarea class="text__description" name="description" placeholder="Ваш комментарий..."></textarea>
+                    <textarea class="text__description" name="description" maxlength="140"
+                      placeholder="Ваш комментарий..."></textarea>
                   </div>
                 </fieldset>
 
