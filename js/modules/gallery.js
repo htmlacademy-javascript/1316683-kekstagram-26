@@ -1,9 +1,9 @@
 import { getPictures } from './data.js';
-import { renderMiniPictures } from './pictures.js';
+import { renderPictures } from './pictures.js';
 import { initFormValidation } from './form.js';
 
 const renderGallery = (count) => {
-  renderMiniPictures(getPictures(count));
+  renderPictures(getPictures(count));
   initFormValidation();
 };
 
