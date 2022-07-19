@@ -6,7 +6,7 @@ const previewImageElement = formElement.querySelector('.img-upload__preview > im
 const SCALE_STEP = 25;
 const MAX_SCALE_VALUE = 100;
 const MIN_SCALE_VALUE = 25;
-const DEFAULT_SCALE_VALUE = 50;
+const DEFAULT_SCALE_VALUE = 100;
 
 const updateScaleImage = () => {
   previewImageElement.style.transform = `scale(${parseInt(valueScaleElement.value, 10) / 100})`;
