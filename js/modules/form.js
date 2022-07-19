@@ -1,3 +1,4 @@
+import { initScale, removeScaleHandler } from './editor.js';
 import { formValidation } from './form-validation.js';
 
 const body = document.body;
@@ -27,6 +28,7 @@ const closeForm = (evt) => {
   inputHashTag.removeEventListener('focus', onFocus);
   textareaComment.removeEventListener('focus', onFocus);
   resetInputValue();
+  removeScaleHandler();
 };
 
 // Проверка на Escape
@@ -59,6 +61,7 @@ const openForm = () => {
   formElement.addEventListener('submit', formValidation);
   inputHashTag.addEventListener('focus', onFocus);
   textareaComment.addEventListener('focus', onFocus);
+  initScale();
 };
 
 // Вызов валидации при событии
