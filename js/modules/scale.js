@@ -3,11 +3,14 @@ const addScaleElement = formElement.querySelector('.scale__control--bigger');
 const reduceScaleElement = formElement.querySelector('.scale__control--smaller');
 const valueScaleElement = formElement.querySelector('.scale__control--value');
 const previewImageElement = formElement.querySelector('.img-upload__preview > img');
+
+// Константы по изменению масштаба
 const SCALE_STEP = 25;
 const MAX_SCALE_VALUE = 100;
 const MIN_SCALE_VALUE = 25;
 const DEFAULT_SCALE_VALUE = 100;
 
+// Обновление состояния элемента
 const updateScaleImage = () => {
   previewImageElement.style.transform = `scale(${parseInt(valueScaleElement.value, 10) / 100})`;
 };
@@ -28,6 +31,7 @@ const reduceScale = () => {
   }
 };
 
+// Инициализация
 const initScale = () => {
   valueScaleElement.value = `${DEFAULT_SCALE_VALUE}%`;
   addScaleElement.addEventListener('click', addScale);
@@ -35,11 +39,13 @@ const initScale = () => {
   updateScaleImage();
 };
 
+// Удаление слушателей событий
 const removeScaleHandler = () => {
   addScaleElement.removeEventListener('click', addScale);
   reduceScaleElement.removeEventListener('click', reduceScale);
 };
 
+// Запуск инциализации
 initScale();
 
 export { initScale, removeScaleHandler };

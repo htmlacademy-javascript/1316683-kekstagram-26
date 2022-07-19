@@ -1,4 +1,5 @@
-import { initScale, removeScaleHandler } from './editor.js';
+import { initScale, removeScaleHandler } from './scale.js';
+import { initSlider } from "./effects.js";
 import { formValidation } from './form-validation.js';
 
 const body = document.body;
@@ -54,6 +55,8 @@ function onBlur(evt) {
 
 // Открытие формы
 const openForm = () => {
+  initScale();
+  initSlider();
   body.classList.add('modal-open');
   overlayElement.classList.remove('hidden');
   closeOverlayElement.addEventListener('click', closeForm);
@@ -61,7 +64,6 @@ const openForm = () => {
   formElement.addEventListener('submit', formValidation);
   inputHashTag.addEventListener('focus', onFocus);
   textareaComment.addEventListener('focus', onFocus);
-  initScale();
 };
 
 // Вызов валидации при событии
