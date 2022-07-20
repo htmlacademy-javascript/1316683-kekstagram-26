@@ -1,5 +1,5 @@
 import { initScale, removeScaleHandler } from './scale.js';
-import { initSlider } from "./effects.js";
+import { openSlider, closeSlider } from './effects.js';
 import { formValidation } from './form-validation.js';
 
 const body = document.body;
@@ -30,6 +30,7 @@ const closeForm = (evt) => {
   textareaComment.removeEventListener('focus', onFocus);
   resetInputValue();
   removeScaleHandler();
+  closeSlider();
 };
 
 // Проверка на Escape
@@ -56,7 +57,7 @@ function onBlur(evt) {
 // Открытие формы
 const openForm = () => {
   initScale();
-  initSlider();
+  openSlider();
   body.classList.add('modal-open');
   overlayElement.classList.remove('hidden');
   closeOverlayElement.addEventListener('click', closeForm);
