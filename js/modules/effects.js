@@ -6,47 +6,71 @@ const sliderElement = formElement.querySelector('.effect-level__slider');
 const filterListElement = formElement.querySelector('ul.effects__list');
 const filterElements = filterListElement.querySelectorAll('input[name="effect"]');
 const originalFilterElement = filterListElement.querySelector('input#effect-none');
-const DEFAULT_EFFECT_VALUE = 100;
-let stepUseEffect = 0.1;
-
 const EFFECT_OPTIONS = {
-  'chrome': {
-    filter: 'grayscale',
+  chrome: {
+    effect: 'grayscale',
     step: 0.1,
-    start: 0,
-    end: 1,
+    min: 0,
+    max: 1,
+    unit: '',
   },
-  'sepia': {
-    filter: 'grayscale',
+  sepia: {
+    effect: 'sepia',
     step: 0.1,
-    start: 0,
-    end: 1,
+    min: 0,
+    max: 1,
+    unit: '',
   },
-  'invert': {
-    filter: 'grayscale',
+  marvin: {
+    effect: 'invert',
     step: 1,
-    start: 0,
-    end: 100,
+    min: 0,
+    max: 100,
+    unit: '%',
   },
-  'blur': {
-    filter: 'grayscale',
+  phobos: {
+    effect: 'blur',
     step: 0.1,
-    start: 0,
-    end: 3,
+    min: 0,
+    max: 3,
+    unit: 'px',
   },
-  'brightness': {
-    filter: 'grayscale',
+  heat: {
+    effect: 'brightness',
     step: 0.1,
-    start: 1,
-    end: 3,
+    min: 1,
+    max: 3,
+    unit: '',
   },
-}
+};
+let selectedFilter = '';
+
+// Управление насыщенностью
+const useSaturation = () => {
+  if (selectedFilter !== '') {
+    previewImageElement.style.filter = `${EFFECT_OPTIONS[selectedFilter].effect}(${valueInputElement.value}${EFFECT_OPTIONS[selectedFilter].unit})`;
+  }
+};
 
 // Обновление значения слайдера
 const syncInputValue = () => {
   sliderElement.noUiSlider.on('update', () => {
+    // Синхронизируем значения полей
     valueInputElement.value = sliderElement.noUiSlider.get();
-    // console.log(valueInputElement.value);
+    useSaturation();
+  });
+};
+
+// Update Options Slider
+const sliderUpdateOptions = (filter) => {
+  selectedFilter = filter;
+  sliderElement.noUiSlider.updateOptions({
+    range: {
+      min: EFFECT_OPTIONS[selectedFilter].min,
+      max: EFFECT_OPTIONS[selectedFilter].max,
+    },
+    start: 100,
+    step: EFFECT_OPTIONS[selectedFilter].step,
   });
 };
 
@@ -56,15 +80,17 @@ const enableSlider = () => {
 };
 
 // Сброс фильтра с изображения
-const removeImageFilter = () => previewImageElement.removeAttribute('class');
-
-const useImageEffect = () => {
-  // previewImageElement.style.filter = 
+const removeImageFilter = () => {
+  previewImageElement.removeAttribute('class');
+  previewImageElement.style = '';
 };
 
 // Наложение фильтра на изображение
-const useImageFilter = (filterValue) => { previewImageElement.className = `effects__preview--${filterValue}`; };
+const useImageFilter = (filterType) => {
+  previewImageElement.className = `effects__preview--${filterType}`;
+};
 
+// Сброс фильтров
 const resetFilter = () => {
   filterElements.forEach((filter) => {
     filter.removeAttribute('checked');
@@ -72,24 +98,42 @@ const resetFilter = () => {
   removeImageFilter();
 };
 
-const setFilter = (filter) => {
+// Выключение слайдера
+const disableSlider = () => {
+  sliderContainerElement.classList.add('hidden');
+  sliderElement.setAttribute('disabled', true);
+};
+
+// Выбор фильтра
+const selectFilter = (filter) => {
   resetFilter();
   filter.target.checked = true;
 
   if (filter.target.value === 'none') {
-    sliderContainerElement.classList.add('hidden');
+    disableSlider();
     removeImageFilter();
   } else {
     sliderContainerElement.classList.remove('hidden');
+    sliderUpdateOptions(filter.target.value);
     enableSlider();
     useImageFilter(filter.target.value);
   }
 };
 
+// Удаление слайдера
 const destroySlider = () => {
   sliderElement.noUiSlider.destroy();
 };
 
+// Закрытие слайдера
+const closeSlider = () => {
+  resetFilter();
+  originalFilterElement.checked = true;
+  destroySlider();
+  filterListElement.removeEventListener('change', selectFilter);
+};
+
+// Создание слайдера
 const createSlider = () => {
   noUiSlider.create(sliderElement, {
     range: {
@@ -97,41 +141,27 @@ const createSlider = () => {
       max: 100,
     },
     start: 100,
-    step: stepUseEffect,
+    step: 0.1,
     connect: 'lower',
   });
 };
 
-const disableSlider = () => {
-  sliderElement.setAttribute('disabled', true);
-};
-
+// Инициализация слайдера
 const initSlider = () => {
-  // Прячем слайдер по дефолту.
-  sliderContainerElement.classList.add('hidden');
   createSlider();
   disableSlider();
   syncInputValue();
 };
 
-const setDefaultFilter = () => {
-  resetFilter();
-  originalFilterElement.checked = true;
-};
-
-const closeSlider = () => {
-  setDefaultFilter();
-  destroySlider();
-  filterListElement.removeEventListener('change', setFilter);
-};
-
+// Открытие слайдера
 const openSlider = () => {
   // Инициализируем слайдер
   initSlider();
   // Сбрасываем эффекты по умолчанию.
-  setDefaultFilter();
+  resetFilter();
+  originalFilterElement.checked = true;
   // Подписываемся на выбор фильтров
-  filterListElement.addEventListener('change', setFilter);
+  filterListElement.addEventListener('change', selectFilter);
 };
 
 export { openSlider, closeSlider };
