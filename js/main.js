@@ -1,4 +1,6 @@
-import { renderGallery } from './modules/gallery.js';
-const COUNT_PICTURES = 25;
+import { getData } from './modules/api.js';
+import { renderPictures } from './modules/pictures.js';
+import { onChangeForm } from './modules/form.js';
 
-renderGallery(COUNT_PICTURES);
+getData(renderPictures);
+onChangeForm();

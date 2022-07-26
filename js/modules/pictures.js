@@ -32,6 +32,8 @@ const closePicture = (evt) => {
   closeElement.removeEventListener('click', closePicture);
   document.removeEventListener('keydown', isEscape);
   uploadMoreElement.removeEventListener('click', uploadComments);
+  showCommentElementsCount = 0;
+  displayingCommentsCount = UPLOAD_COMMENTS_COUNT;
 };
 
 function isEscape(evt) {
@@ -56,7 +58,11 @@ const renderComments = () => {
   renderCommentsCount();
 
   // Скрытие кнопки загрузить при полной загрузке
-  if (showCommentElementsCount === comments.length) { uploadMoreElement.classList.add('hidden'); }
+  if (showCommentElementsCount === comments.length) {
+    uploadMoreElement.classList.add('hidden');
+  } else {
+    uploadMoreElement.classList.remove('hidden');
+  }
 };
 
 function uploadComments() {
