@@ -1,5 +1,6 @@
 const formElement = document.querySelector('form#upload-select-image');
-const previewImageElement = formElement.querySelector('.img-upload__preview > img');
+const imageElement = formElement.querySelector('.img-upload__preview > img');
+// Slider
 const sliderContainerElement = formElement.querySelector('fieldset.img-upload__effect-level');
 const valueInputElement = sliderContainerElement.querySelector('input.effect-level__value');
 const sliderElement = formElement.querySelector('.effect-level__slider');
@@ -43,17 +44,23 @@ const EFFECT_OPTIONS = {
     unit: '',
   },
 };
+
 let selectedFilter = '';
+
+// Установка выбора фильтра по умолчанию
+const setDefaulFilter = () => {
+  originalFilterElement.checked = true;
+};
 
 // Управление насыщенностью
 const useSaturation = () => {
   if (selectedFilter !== '') {
-    previewImageElement.style.filter = `${EFFECT_OPTIONS[selectedFilter].effect}(${valueInputElement.value}${EFFECT_OPTIONS[selectedFilter].unit})`;
+    imageElement.style.filter = `${EFFECT_OPTIONS[selectedFilter].effect}(${valueInputElement.value}${EFFECT_OPTIONS[selectedFilter].unit})`;
   }
 };
 
 // Обновление значения слайдера
-const syncInputValue = () => {
+const updateInputSlider = () => {
   sliderElement.noUiSlider.on('update', () => {
     // Синхронизируем значения полей
     valueInputElement.value = sliderElement.noUiSlider.get();
@@ -62,7 +69,7 @@ const syncInputValue = () => {
 };
 
 // Update Options Slider
-const sliderUpdateOptions = (filter) => {
+const updateSliderOptions = (filter) => {
   selectedFilter = filter;
   sliderElement.noUiSlider.updateOptions({
     range: {
@@ -76,26 +83,8 @@ const sliderUpdateOptions = (filter) => {
 
 // Разблокировка слайдера
 const enableSlider = () => {
+  sliderContainerElement.classList.remove('hidden');
   sliderElement.removeAttribute('disabled');
-};
-
-// Сброс фильтра с изображения
-const removeImageFilter = () => {
-  previewImageElement.removeAttribute('class');
-  previewImageElement.style = '';
-};
-
-// Наложение фильтра на изображение
-const useImageFilter = (filterType) => {
-  previewImageElement.className = `effects__preview--${filterType}`;
-};
-
-// Сброс фильтров
-const resetFilter = () => {
-  filterElements.forEach((filter) => {
-    filter.removeAttribute('checked');
-  });
-  removeImageFilter();
 };
 
 // Выключение слайдера
@@ -104,34 +93,67 @@ const disableSlider = () => {
   sliderElement.setAttribute('disabled', true);
 };
 
-// Выбор фильтра
-const selectFilter = (filter) => {
-  resetFilter();
-  filter.target.checked = true;
-
-  if (filter.target.value === 'none') {
-    disableSlider();
-    removeImageFilter();
-  } else {
-    sliderContainerElement.classList.remove('hidden');
-    sliderUpdateOptions(filter.target.value);
-    enableSlider();
-    useImageFilter(filter.target.value);
-  }
-};
-
 // Удаление слайдера
 const destroySlider = () => {
   sliderElement.noUiSlider.destroy();
 };
 
+// Сброс выбора с элементов
+const resetCheckedFilters = () => {
+  filterElements.forEach((filter) => {
+    filter.removeAttribute('checked');
+  });
+};
+
+// Сброс фильтра с изображения
+const removeFiltersForImage = () => {
+  imageElement.removeAttribute('class');
+  imageElement.style.filter = '';
+};
+
+// Сброс фильтров
+const resetAllFilters = () => {
+  resetCheckedFilters();
+  removeFiltersForImage();
+};
+
+// Применение фильтра на изображение
+const useImageFilter = (filterType) => {
+  imageElement.className = `effects__preview--${filterType}`;
+};
+
+// Выбор фильтра
+const selectFilter = (filter) => {
+  resetAllFilters();
+  filter.target.checked = true;
+
+  if (filter.target.value === 'none') {
+    disableSlider();
+    removeFiltersForImage();
+  } else {
+    updateSliderOptions(filter.target.value);
+    enableSlider();
+    useImageFilter(filter.target.value);
+  }
+};
+
+// Удаление обработчика события на фильтра
+const removeSelectFilterHandler = () => filterListElement.removeEventListener('change', selectFilter);
+
 // Закрытие слайдера
 const closeSlider = () => {
-  resetFilter();
-  originalFilterElement.checked = true;
+  // Сброс фильтров
+  resetAllFilters();
+  // Установка фильтра по умолчанию
+  setDefaulFilter();
+  // Удаление слайдера
   destroySlider();
-  filterListElement.removeEventListener('change', selectFilter);
+  // Удаление обработчика события на фильтра
+  removeSelectFilterHandler();
 };
+
+// Добавление обработчика события на фильтра
+const onSelectFilterHandler = () => filterListElement.addEventListener('change', selectFilter);
 
 // Создание слайдера
 const createSlider = () => {
@@ -146,22 +168,18 @@ const createSlider = () => {
   });
 };
 
-// Инициализация слайдера
-const initSlider = () => {
-  createSlider();
-  disableSlider();
-  syncInputValue();
-};
-
 // Открытие слайдера
 const openSlider = () => {
   // Инициализируем слайдер
-  initSlider();
-  // Сбрасываем эффекты по умолчанию.
-  resetFilter();
-  originalFilterElement.checked = true;
+  createSlider();
+  disableSlider();
+  updateInputSlider();
+  // Сбрасываем все фильтры
+  resetAllFilters();
+  // Устанавливаем фильтр по умолчанию
+  setDefaulFilter();
   // Подписываемся на выбор фильтров
-  filterListElement.addEventListener('change', selectFilter);
+  onSelectFilterHandler();
 };
 
-export { openSlider, closeSlider };
+export { openSlider, closeSlider, resetAllFilters };

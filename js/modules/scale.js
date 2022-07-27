@@ -1,8 +1,9 @@
+// Scale
 const formElement = document.querySelector('form#upload-select-image');
+const imageElement = formElement.querySelector('.img-upload__preview > img');
 const addScaleElement = formElement.querySelector('.scale__control--bigger');
 const reduceScaleElement = formElement.querySelector('.scale__control--smaller');
 const valueScaleElement = formElement.querySelector('.scale__control--value');
-const previewImageElement = formElement.querySelector('.img-upload__preview > img');
 
 // Константы по изменению масштаба
 const SCALE_STEP = 25;
@@ -10,9 +11,9 @@ const MAX_SCALE_VALUE = 100;
 const MIN_SCALE_VALUE = 25;
 const DEFAULT_SCALE_VALUE = 100;
 
-// Обновление состояния элемента
+// Обновление масштаба
 const updateScaleImage = () => {
-  previewImageElement.style.transform = `scale(${parseInt(valueScaleElement.value, 10) / 100})`;
+  imageElement.style.transform = `scale(${parseInt(valueScaleElement.value, 10) / 100})`;
 };
 
 // Увеличение масштаба
@@ -31,21 +32,23 @@ const reduceScale = () => {
   }
 };
 
-// Инициализация
-const initScale = () => {
-  valueScaleElement.value = `${DEFAULT_SCALE_VALUE}%`;
+// Добавление обработчики событий на элементы управления масштаба
+const addScaleHandlers = () => {
   addScaleElement.addEventListener('click', addScale);
   reduceScaleElement.addEventListener('click', reduceScale);
-  updateScaleImage();
 };
 
-// Удаление слушателей событий
-const removeScaleHandler = () => {
+// Удаление обработчиков событий элементов управления масштаба
+const removeScaleHandlers = () => {
   addScaleElement.removeEventListener('click', addScale);
   reduceScaleElement.removeEventListener('click', reduceScale);
 };
 
-// Запуск инциализации
-initScale();
+// Инициализация Функции масштаба
+const initScale = () => {
+  valueScaleElement.value = `${DEFAULT_SCALE_VALUE}%`;
+  updateScaleImage();
+  addScaleHandlers();
+};
 
-export { initScale, removeScaleHandler };
+export { initScale, removeScaleHandlers };

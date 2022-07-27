@@ -1,40 +1,47 @@
-import { initScale, removeScaleHandler } from './scale.js';
-import { openSlider, closeSlider } from './effects.js';
+import { initScale, removeScaleHandlers } from './scale.js';
+import { openSlider, closeSlider, resetAllFilters } from './filter.js';
 import { formValidation } from './form-validation.js';
-
 const body = document.body;
 const formElement = document.querySelector('form#upload-select-image');
 const uploadElement = formElement.querySelector('#upload-file');
 const overlayElement = formElement.querySelector('.img-upload__overlay');
 const closeOverlayElement = overlayElement.querySelector('#upload-cancel');
-const defaultImage = uploadElement.value;
 const inputHashTag = overlayElement.querySelector('.text__hashtags');
 const textareaComment = overlayElement.querySelector('textarea.text__description');
 
 // Сброс инпутов
-const resetInputValue = () => {
-  uploadElement.value = defaultImage;
+const resetFormData = () => {
+  uploadElement.value = '';
   inputHashTag.value = '';
   textareaComment.value = '';
+  resetAllFilters();
+};
+
+const removeKeydownHandlerForm = () => {
+  document.removeEventListener('keydown', onKeydownEscape);
+};
+
+const addKeydownHandlerForm = () => {
+  document.addEventListener('keydown', onKeydownEscape);
 };
 
 // Закрытие формы
 const closeForm = (evt) => {
-  evt.preventDefault();
+  if (evt) { evt.preventDefault(); }
   body.classList.remove('modal-open');
   overlayElement.classList.add('hidden');
   closeOverlayElement.removeEventListener('click', closeForm);
-  document.removeEventListener('keydown', isEscape);
+  removeKeydownHandlerForm();
   formElement.removeEventListener('submit', formValidation);
-  inputHashTag.removeEventListener('focus', onFocus);
-  textareaComment.removeEventListener('focus', onFocus);
-  resetInputValue();
-  removeScaleHandler();
+  inputHashTag.removeEventListener('focus', onFocusInput);
+  textareaComment.removeEventListener('focus', onFocusInput);
+  resetFormData();
+  removeScaleHandlers();
   closeSlider();
 };
 
 // Проверка на Escape
-function isEscape(evt) {
+function onKeydownEscape(evt) {
   if (evt.code === 'Escape') {
     if (inputHashTag.classList.contains('_focus') || textareaComment.classList.contains('_focus')) {
       evt.preventDefault();
@@ -44,14 +51,14 @@ function isEscape(evt) {
   }
 }
 
-function onFocus(evt) {
+function onFocusInput(evt) {
   evt.target.classList.add('_focus');
-  evt.target.addEventListener('blur', onBlur);
+  evt.target.addEventListener('blur', onBlurInput);
 }
 
-function onBlur(evt) {
+function onBlurInput(evt) {
   evt.target.classList.remove('_focus');
-  evt.target.removeEventListener('blur', onBlur);
+  evt.target.removeEventListener('blur', onBlurInput);
 }
 
 // Открытие формы
@@ -61,15 +68,15 @@ const openForm = () => {
   body.classList.add('modal-open');
   overlayElement.classList.remove('hidden');
   closeOverlayElement.addEventListener('click', closeForm);
-  document.addEventListener('keydown', isEscape);
+  addKeydownHandlerForm();
   formElement.addEventListener('submit', formValidation);
-  inputHashTag.addEventListener('focus', onFocus);
-  textareaComment.addEventListener('focus', onFocus);
+  inputHashTag.addEventListener('focus', onFocusInput);
+  textareaComment.addEventListener('focus', onFocusInput);
 };
 
-// Вызов валидации при событии
-const initFormValidation = () => {
+// Открытие формы при 'change' у инпута
+const onChangeForm = () => {
   uploadElement.addEventListener('change', openForm);
 };
 
-export { initFormValidation };
+export { onChangeForm, resetFormData, closeForm, removeKeydownHandlerForm, addKeydownHandlerForm };
