@@ -153,7 +153,7 @@ const closeSlider = () => {
 };
 
 // Добавление обработчика события на фильтра
-const onSelectFilterHandler = () => filterListElement.addEventListener('change', selectFilter);
+const onSelectFilter = () => filterListElement.addEventListener('change', selectFilter);
 
 // Создание слайдера
 const createSlider = () => {
@@ -179,7 +179,7 @@ const openSlider = () => {
   // Устанавливаем фильтр по умолчанию
   setDefaulFilter();
   // Подписываемся на выбор фильтров
-  onSelectFilterHandler();
+  onSelectFilter();
 };
 
 export { openSlider, closeSlider, resetAllFilters };
