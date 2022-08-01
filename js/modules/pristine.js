@@ -3,7 +3,7 @@ const inputHashTag = formElement.querySelector('input.text__hashtags');
 const textareaComment = formElement.querySelector('textarea.text__description');
 
 // PRISTINE CONFIG
-const pristineConfig = {
+const PRISTINE_CONFIG = {
   classTo: 'img-upload__field-wrapper',
   errorClass: 'img-upload__field-wrapper--invalid',
   successClass: 'img-upload__field-wrapper--valid',
@@ -12,7 +12,7 @@ const pristineConfig = {
   errorTextClass: 'form__error'
 };
 // PRISTINE INIT
-const pristine = new Pristine(formElement, pristineConfig);
+const pristine = new Pristine(formElement, PRISTINE_CONFIG);
 
 // Проверка на пустое поле
 const isEmptyInput = () => inputHashTag.value.length === 0;

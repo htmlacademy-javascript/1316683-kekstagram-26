@@ -15,9 +15,9 @@ const pictureTemplate = document.querySelector('#picture')
 const uploadMoreElement = bigPictureElement.querySelector('.comments-loader');
 const countCommentsContainer = bigPictureElement.querySelector('.social__comment-count');
 const showCommentElement = countCommentsContainer.firstChild;
-const UPLOAD_COMMENTS_COUNT = 5;
+const UPLOAD_COMMENT_COUNT = 5;
 let showCommentElementsCount = 0;
-let displayingCommentsCount = UPLOAD_COMMENTS_COUNT;
+let displayingCommentsCount = UPLOAD_COMMENT_COUNT;
 let comments = [];
 
 const renderCommentsCount = () => {
@@ -33,7 +33,7 @@ const closePicture = (evt) => {
   document.removeEventListener('keydown', isEscape);
   uploadMoreElement.removeEventListener('click', uploadComments);
   showCommentElementsCount = 0;
-  displayingCommentsCount = UPLOAD_COMMENTS_COUNT;
+  displayingCommentsCount = UPLOAD_COMMENT_COUNT;
 };
 
 function isEscape(evt) {
@@ -43,7 +43,7 @@ function isEscape(evt) {
 }
 
 const renderComments = () => {
-  const commentsForRender = comments.slice(displayingCommentsCount - UPLOAD_COMMENTS_COUNT, displayingCommentsCount);
+  const commentsForRender = comments.slice(displayingCommentsCount - UPLOAD_COMMENT_COUNT, displayingCommentsCount);
 
   // Отрисовываем комментарии
   commentsForRender.forEach((commentsItem) => {
@@ -66,7 +66,7 @@ const renderComments = () => {
 };
 
 function uploadComments() {
-  displayingCommentsCount += UPLOAD_COMMENTS_COUNT;
+  displayingCommentsCount += UPLOAD_COMMENT_COUNT;
   renderComments();
 }
 
@@ -88,7 +88,7 @@ const generateBigPicture = (pictureData) => {
   // Очищаем контейнер с комментариями
   commentsContainerElement.innerHTML = '';
   comments = pictureData.comments;
-  displayingCommentsCount = UPLOAD_COMMENTS_COUNT;
+  displayingCommentsCount = UPLOAD_COMMENT_COUNT;
   // Вызываем функцию для начальной генерации комментариев
   renderComments();
   // Открываем окно
